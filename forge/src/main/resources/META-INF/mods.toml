@@ -1,0 +1,28 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+issueTrackerURL = "https://github.com/mahmudindev/mcmod-modifiedbiomesource/issues"
+license = "ARR"
+
+[[mods]]
+modId = "modifiedbiomesource"
+version = "${version}"
+displayName = "Modified Biome Source"
+authors = "mahmudindev"
+description = '''
+Add modified biome sources that can be configured.
+'''
+logoFile = "assets/modifiedbiomesource/icon.png"
+
+[[dependencies.modifiedbiomesource]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.modifiedbiomesource]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
