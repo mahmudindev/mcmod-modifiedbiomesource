@@ -1,11 +1,9 @@
-package com.github.mahmudindev.mcmod.modifiedbiomesource.forge;
+package com.github.mahmudindev.mcmod.modifiedbiomesource.neoforge;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
@@ -20,10 +18,7 @@ public class ModifiedBiomeSourceExpectPlatformImpl {
                 resourceLocation.getNamespace()
         );
 
-        // When using the constructor, it crashes on the recommended v47.3.0
-        //noinspection removal
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        deferredRegister.register(modEventBus);
+        deferredRegister.register(ModifiedBiomeSourceNeoForge.EVENT_BUS);
 
         return deferredRegister.register(resourceLocation.getPath(), supplier);
     }
