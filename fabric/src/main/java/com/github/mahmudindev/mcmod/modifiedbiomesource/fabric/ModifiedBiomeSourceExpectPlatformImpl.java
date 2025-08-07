@@ -13,7 +13,7 @@ public class ModifiedBiomeSourceExpectPlatformImpl {
             ResourceLocation resourceLocation,
             Supplier<? extends V> supplier
     ) {
-        Registry<?> registry = BuiltInRegistries.REGISTRY.get(resourceKey.location());
+        Registry<?> registry = BuiltInRegistries.REGISTRY.getValue(resourceKey.location());
         if (registry == null) {
             throw new RuntimeException("Registry entry may not exist");
         }
