@@ -22,6 +22,7 @@
       "com.github.mahmudindev.mcmod.modifiedbiomesource.fabric.client.ModifiedBiomeSourceFabricClient"
     ]
   },
+  "accessWidener": "modifiedbiomesource.accesswidener",
   "mixins": [
     "modifiedbiomesource.mixins.json"
   ],

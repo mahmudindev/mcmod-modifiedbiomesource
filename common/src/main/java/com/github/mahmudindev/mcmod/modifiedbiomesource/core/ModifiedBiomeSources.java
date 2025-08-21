@@ -10,5 +10,10 @@ public class ModifiedBiomeSources {
                 ModifiedMultiNoiseBiomeSource.ID,
                 () -> ModifiedMultiNoiseBiomeSource.CODEC
         );
+        ModifiedBiomeSourceExpectPlatform.registerRegistryEntry(
+                Registries.BIOME_SOURCE,
+                ModifiedTheEndBiomeSource.ID,
+                () -> ModifiedTheEndBiomeSource.CODEC
+        );
     }
 }
