@@ -17,7 +17,9 @@ import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.MultiNoiseBiomeSourceParameterList;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ModifiedMultiNoiseBiomeSource extends BiomeSource implements IModifiedBiomeSource {
@@ -36,7 +38,7 @@ public class ModifiedMultiNoiseBiomeSource extends BiomeSource implements IModif
             Biome.CODEC.optionalFieldOf("fallback").forGetter(v -> v.fallback)
     ).apply(i, ModifiedMultiNoiseBiomeSource::new));
 
-    private final Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>> parameters;
+    private Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>> parameters;
     private final Optional<Boolean> modSupport;
     private final Optional<HolderSet<Biome>> allows;
     private final Optional<HolderSet<Biome>> denies;
@@ -80,16 +82,44 @@ public class ModifiedMultiNoiseBiomeSource extends BiomeSource implements IModif
         return this.fallback.orElse(null);
     }
 
+    public void initializeParameters() {
+        Climate.ParameterList<Holder<Biome>> parameters = this.parameters.map(
+                parameterList -> parameterList,
+                holder -> holder.value().parameters()
+        );
+
+        parameters = ((IClimateParameterList<Holder<Biome>>) parameters).clone();
+
+        this.parameters = Either.left(parameters);
+    }
+
     public Climate.ParameterList<Holder<Biome>> getParameters() {
         Climate.ParameterList<Holder<Biome>> parameters = this.parameters.map(
                 parameterList -> parameterList,
                 holder -> holder.value().parameters()
         );
 
-        ((IClimateParameterList<Holder<Biome>>) parameters).modify(
-                this::canGenerate,
-                this.getFallback()
-        );
+        if (((IClimateParameterList<Holder<Biome>>) parameters).isChanged()) {
+            return parameters;
+        }
+
+        List<Pair<Climate.ParameterPoint, Holder<Biome>>> values = parameters
+                .values()
+                .stream()
+                .filter(v -> this.canGenerate(v.getSecond()))
+                .collect(Collectors.toList());
+
+        Holder<Biome> fallback = getFallback();
+        if (fallback != null) {
+            values.add(new Pair<>(
+                    Climate.parameters(0, 0, 0, 0, 0, 0, 0),
+                    fallback
+            ));
+        }
+
+        ((IClimateParameterList<Holder<Biome>>) parameters).change(values);
+
+        this.parameters = Either.left(parameters);
 
         return parameters;
     }

@@ -1,7 +1,14 @@
 package com.github.mahmudindev.mcmod.modifiedbiomesource.base;
 
-import java.util.function.Predicate;
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.world.level.biome.Climate;
 
-public interface IClimateParameterList<T> {
-    void modify(Predicate<T> canGenerateBiome, T fallbackBiome);
+import java.util.List;
+
+public interface IClimateParameterList<T> extends Cloneable {
+    void change(List<Pair<Climate.ParameterPoint, T>> values);
+
+    boolean isChanged();
+
+    Climate.ParameterList<T> clone();
 }
