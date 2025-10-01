@@ -6,7 +6,8 @@
   "client": [
   ],
   "mixins": [
-    "ClimateParameterListMixin"
+    "ClimateParameterListMixin",
+    "MinecraftServerLMixin"
   ],
   "injectors": {
     "defaultRequire": 1
