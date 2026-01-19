@@ -12,7 +12,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
@@ -24,9 +24,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ModifiedMultiNoiseBiomeSource extends BiomeSource implements IModifiedBiomeSource {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(
             ModifiedBiomeSource.MOD_ID,
-            String.format("%s_%s", ResourceLocation.DEFAULT_NAMESPACE, "multi_noise")
+            String.format("%s_%s", Identifier.DEFAULT_NAMESPACE, "multi_noise")
     );
     public static final MapCodec<ModifiedMultiNoiseBiomeSource> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             Codec.mapEither(

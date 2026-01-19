@@ -6,8 +6,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.DensityFunction;
 
@@ -15,9 +15,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class ModifiedTheEndBiomeSource extends BiomeSource implements IModifiedBiomeSource {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(
             ModifiedBiomeSource.MOD_ID,
-            String.format("%s_%s", ResourceLocation.DEFAULT_NAMESPACE, "the_end")
+            String.format("%s_%s", Identifier.DEFAULT_NAMESPACE, "the_end")
     );
     public static final MapCodec<ModifiedTheEndBiomeSource> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             RegistryOps.retrieveElement(Biomes.THE_END),
