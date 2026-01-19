@@ -8,7 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.Services;
 import net.minecraft.server.WorldStem;
-import net.minecraft.server.level.progress.ChunkProgressListenerFactory;
+import net.minecraft.server.level.progress.LevelLoadListener;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -36,7 +36,7 @@ public abstract class MinecraftServerLMixin {
             Proxy proxy,
             DataFixer dataFixer,
             Services services,
-            ChunkProgressListenerFactory chunkProgressListenerFactory,
+            LevelLoadListener levelLoadListener,
             CallbackInfo ci
     ) {
         RegistryAccess.Frozen registryAccess = this.registryAccess();
