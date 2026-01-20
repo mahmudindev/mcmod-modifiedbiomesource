@@ -104,6 +104,8 @@ public class ModifiedMultiNoiseBiomeSource extends BiomeSource implements IModif
             return parameters;
         }
 
+        parameters = ((IClimateParameterList<Holder<Biome>>) parameters).clone();
+
         List<Pair<Climate.ParameterPoint, Holder<Biome>>> values = parameters
                 .values()
                 .stream()
