@@ -1,5 +1,7 @@
-package com.github.mahmudindev.mcmod.modifiedbiomesource.fabric;
+package com.github.mahmudindev.mcmod.modifiedbiomesource.fabric.platform;
 
+import com.github.mahmudindev.mcmod.modifiedbiomesource.platform.services.IPlatformHelper;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -7,8 +9,24 @@ import net.minecraft.resources.ResourceKey;
 
 import java.util.function.Supplier;
 
-public class ModifiedBiomeSourceExpectPlatformImpl {
-    public static <T, V extends T> Supplier<V> registerRegistryEntry(
+public class FabricPlatformHelper implements IPlatformHelper {
+    @Override
+    public String getPlatformName() {
+        return "Fabric";
+    }
+
+    @Override
+    public boolean isModLoaded(String modId) {
+        return FabricLoader.getInstance().isModLoaded(modId);
+    }
+
+    @Override
+    public boolean isDevelopmentEnvironment() {
+        return FabricLoader.getInstance().isDevelopmentEnvironment();
+    }
+
+    @Override
+    public <T, V extends T> Supplier<V> registerRegistryEntry(
             ResourceKey<? extends Registry<T>> resourceKey,
             Identifier identifier,
             Supplier<? extends V> supplier

@@ -1,16 +1,16 @@
 package com.github.mahmudindev.mcmod.modifiedbiomesource.core;
 
-import com.github.mahmudindev.mcmod.modifiedbiomesource.ModifiedBiomeSourceExpectPlatform;
+import com.github.mahmudindev.mcmod.modifiedbiomesource.ModifiedBiomeSource;
 import net.minecraft.core.registries.Registries;
 
 public class ModifiedBiomeSources {
     public static void bootstrap() {
-        ModifiedBiomeSourceExpectPlatform.registerRegistryEntry(
+        ModifiedBiomeSource.PLATFORM.registerRegistryEntry(
                 Registries.BIOME_SOURCE,
                 ModifiedMultiNoiseBiomeSource.ID,
                 () -> ModifiedMultiNoiseBiomeSource.CODEC
         );
-        ModifiedBiomeSourceExpectPlatform.registerRegistryEntry(
+        ModifiedBiomeSource.PLATFORM.registerRegistryEntry(
                 Registries.BIOME_SOURCE,
                 ModifiedTheEndBiomeSource.ID,
                 () -> ModifiedTheEndBiomeSource.CODEC
