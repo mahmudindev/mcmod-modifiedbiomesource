@@ -9,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.Services;
 import net.minecraft.server.WorldStem;
 import net.minecraft.server.level.progress.LevelLoadListener;
+import net.minecraft.server.notifications.NotificationManager;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -41,6 +42,7 @@ public abstract class MinecraftServerLMixin {
             Services services,
             LevelLoadListener levelLoadListener,
             boolean propagatesCrashes,
+            NotificationManager notificationManager,
             CallbackInfo ci
     ) {
         RegistryAccess.Frozen registryAccess = this.registryAccess();
