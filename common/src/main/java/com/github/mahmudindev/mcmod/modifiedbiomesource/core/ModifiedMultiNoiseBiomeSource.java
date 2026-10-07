@@ -10,13 +10,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeSource;
-import net.minecraft.world.level.biome.Climate;
-import net.minecraft.world.level.biome.MultiNoiseBiomeSourceParameterList;
+import net.minecraft.world.level.biome.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,8 +31,8 @@ public class ModifiedMultiNoiseBiomeSource extends BiomeSource implements IModif
                     MultiNoiseBiomeSourceParameterList.CODEC.fieldOf("preset").withLifecycle(Lifecycle.stable())
             ).forGetter(v -> v.parameters),
             Codec.BOOL.optionalFieldOf("mod_support").forGetter(v -> v.modSupport),
-            RegistryCodecs.homogeneousList(Registries.BIOME).optionalFieldOf("allows").forGetter(v -> v.allows),
-            RegistryCodecs.homogeneousList(Registries.BIOME).optionalFieldOf("denies").forGetter(v -> v.denies),
+            RegistryCodecs.holderSet(Registries.BIOME).optionalFieldOf("allows").forGetter(v -> v.allows),
+            RegistryCodecs.holderSet(Registries.BIOME).optionalFieldOf("denies").forGetter(v -> v.denies),
             Biome.CODEC.optionalFieldOf("fallback").forGetter(v -> v.fallback)
     ).apply(i, ModifiedMultiNoiseBiomeSource::new));
 
@@ -133,7 +130,9 @@ public class ModifiedMultiNoiseBiomeSource extends BiomeSource implements IModif
     }
 
     @Override
-    public Holder<Biome> getNoiseBiome(int i, int j, int k, Climate.Sampler sampler) {
-        return this.getParameters().findValue(sampler.sample(i, j, k));
+    public BiomeResolver createResolver(Climate.Sampler sampler) {
+        return (quartX, quartY, quartZ) -> {
+            return this.getParameters().findValue(sampler.sample(quartX, quartY, quartZ));
+        };
     }
 }

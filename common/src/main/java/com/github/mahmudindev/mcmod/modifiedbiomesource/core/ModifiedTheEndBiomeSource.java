@@ -6,10 +6,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.level.biome.*;
-import net.minecraft.world.level.levelgen.DensityFunction;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -26,8 +26,8 @@ public class ModifiedTheEndBiomeSource extends BiomeSource implements IModifiedB
             RegistryOps.retrieveElement(Biomes.SMALL_END_ISLANDS),
             RegistryOps.retrieveElement(Biomes.END_BARRENS),
             Codec.BOOL.optionalFieldOf("mod_support").forGetter(v -> v.modSupport),
-            RegistryCodecs.homogeneousList(Registries.BIOME).optionalFieldOf("allows").forGetter(v -> v.allows),
-            RegistryCodecs.homogeneousList(Registries.BIOME).optionalFieldOf("denies").forGetter(v -> v.denies),
+            RegistryCodecs.holderSet(Registries.BIOME).optionalFieldOf("allows").forGetter(v -> v.allows),
+            RegistryCodecs.holderSet(Registries.BIOME).optionalFieldOf("denies").forGetter(v -> v.denies),
             Biome.CODEC.optionalFieldOf("fallback").forGetter(v -> v.fallback)
     ).apply(i, i.stable(ModifiedTheEndBiomeSource::new)));
 
@@ -104,22 +104,26 @@ public class ModifiedTheEndBiomeSource extends BiomeSource implements IModifiedB
     }
 
     @Override
-    public Holder<Biome> getNoiseBiome(int i, int j, int k, Climate.Sampler sampler) {
-        int l = QuartPos.toBlock(i);
-        int m = QuartPos.toBlock(j);
-        int n = QuartPos.toBlock(k);
-        int o = SectionPos.blockToSectionCoord(l);
-        int p = SectionPos.blockToSectionCoord(n);
+    public BiomeResolver createResolver(Climate.Sampler sampler) {
+        return (quartX, quartY, quartZ) -> this.getNoiseBiome(quartX, quartY, quartZ, sampler);
+    }
 
-        if ((long) o * (long) o + (long) p * (long) p <= 4096L) {
+    public Holder<Biome> getNoiseBiome(int quartX, int quartY, int quartZ, Climate.Sampler sampler) {
+        int blockX = QuartPos.toBlock(quartX);
+        int blockY = QuartPos.toBlock(quartY);
+        int blockZ = QuartPos.toBlock(quartZ);
+        int chunkX = SectionPos.blockToSectionCoord(blockX);
+        int chunkZ = SectionPos.blockToSectionCoord(blockZ);
+
+        if ((long)chunkX * (long)chunkX + (long)chunkZ * (long)chunkZ <= 4096L) {
             if (this.canGenerate(this.biomeTheEnd)) {
                 return this.biomeTheEnd;
             }
         }
 
-        int q = (SectionPos.blockToSectionCoord(l) * 2 + 1) * 8;
-        int r = (SectionPos.blockToSectionCoord(n) * 2 + 1) * 8;
-        double d = sampler.erosion().compute(new DensityFunction.SinglePointContext(q, m, r));
+        int weirdBlockX = (SectionPos.blockToSectionCoord(blockX) * 2 + 1) * 8;
+        int weirdBlockZ = (SectionPos.blockToSectionCoord(blockZ) * 2 + 1) * 8;
+        double d = sampler.erosion().sampleValue(weirdBlockX, blockY, weirdBlockZ);
 
         if (d > 0.25) {
             if (this.canGenerate(this.biomeEndHighlands)) {
